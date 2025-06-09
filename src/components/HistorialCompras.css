@@ -1,0 +1,80 @@
+.historial-compras {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+  }
+  
+  .historial-compras h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #050000;
+  }
+  
+  .filtro-fecha {
+    margin-bottom: 20px;
+  }
+  
+  .filtro-fecha label {
+    margin-right: 10px;
+    font-weight: bold;
+    color: #555;
+  }
+  
+  .filtro-fecha input {
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+  }
+  
+  .sin-compras {
+    text-align: center;
+    color: #777;
+    font-style: italic;
+  }
+  
+  .tabla-compras {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .tabla-compras th,
+  .tabla-compras td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: left;
+  }
+  
+  .tabla-compras th {
+    background-color: #007bff;
+    color: white;
+  }
+  
+  .tabla-compras tbody tr:hover {
+    background-color: #f1f1f1;
+  }
+  
+  .estado {
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: bold;
+  }
+  
+  .estado.completado {
+    background-color: #40fc6c;
+    color: rgb(4, 0, 0);
+  }
+  
+  .estado.pendiente {
+    background-color: #ffdb6f;
+    color: rgb(252, 252, 252);
+  }
+  
+  .estado.en-proceso {
+    background-color: #ff7164;
+    color: rgb(253, 248, 248);
+  }

@@ -1,0 +1,80 @@
+/* Estilos para el carrito */
+.carrito-page {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.carrito-vacio {
+  padding: 4rem;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.carrito-lista {
+  background: white;
+  border-radius: 12px;
+  padding: 1rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.carrito-item {
+  background: #f8f9fa;
+  border-radius: 8px;
+  transition: transform 0.2s ease;
+}
+
+.carrito-item:hover {
+  transform: translateX(5px);
+}
+
+.carrito-imagen {
+  width: 80px;
+  height: 80px;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+.carrito-total {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.bancos-section {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.banco-logo {
+  width: 100px;
+  height: auto;
+  transition: transform 0.3s ease;
+}
+
+.banco-logo:hover {
+  transform: scale(1.1);
+}
+
+.factura-section {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+  .carrito-item {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .carrito-imagen {
+    margin-bottom: 1rem;
+  }
+
+  .banco-logo {
+    width: 80px;
+  }
+}
