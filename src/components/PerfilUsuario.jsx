@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useAuth } from "../auth/AuthContext";
 import { Link } from "react-router-dom";
 import { Form, Button, Alert, Card, Container } from "react-bootstrap";
@@ -11,6 +11,15 @@ const PerfilUsuario = () => {
     telefono: user?.telefono || "",
     direccion: user?.direccion || ""
   });
+
+  useEffect(()=>{
+    setFormData({
+    nombre: user?.nombre || "",
+    email: user?.email || "",
+    telefono: user?.telefono || "",
+    direccion: user?.direccion || ""
+  });
+  },[user]);
 
   const handleChange = (e) => {
     setFormData({

@@ -23,7 +23,7 @@ function AdminPanel() {
         return <RegistroUsuarios />;
       case "marcas":
         return <MarcasAdmin />;
-      case "carrito": 
+      case "carrito":
         return <AdminCarrito />;
       default:
         return <Dashboard />;

@@ -8,7 +8,7 @@ function Carrito() {
   const { carrito, eliminarDelCarrito, vaciarCarrito } = useContext(CarritoContext);
 
   // Calcular el total del carrito
-  const total = carrito.reduce((acc, producto) => acc + producto.precio * producto.cantidad, 0);
+  const total = carrito.reduce((acc, producto) => acc + producto.idProductoNavigation.precio * producto.cantidad, 0);
 
   // Estado para el archivo de factura
   const [factura, setFactura] = React.useState(null);
@@ -42,16 +42,16 @@ function Carrito() {
       {/* Lista de productos */}
       <div className="carrito-lista mb-4">
         {carrito.map((producto) => (
-          <div key={producto.id} className="carrito-item p-3 mb-3">
+          <div key={producto.idProducto} className="carrito-item p-3 mb-3">
             <div className="d-flex align-items-center">
               <img
-                src={producto.imagen}
-                alt={producto.nombre}
+                src={producto.idProductoNavigation.imagenUrl}
+                alt={producto.idProductoNavigation.nombreProducto}
                 className="carrito-imagen me-3"
               />
               <div className="carrito-info">
-                <h5 className="mb-1">{producto.nombre}</h5>
-                <p className="mb-1 text-muted">${producto.precio.toFixed(2)}</p>
+                <h5 className="mb-1">{producto.idProductoNavigation.nombreProducto}</h5>
+                <p className="mb-1 text-muted">${producto.idProductoNavigation.precio}</p>
                 <small>Cantidad: {producto.cantidad}</small>
               </div>
             </div>

@@ -4,23 +4,9 @@ import "./Productos.css";
 import { CarritoContext } from "./components/CarritoContext";
 
 function Productos() {
-  const productos = [
-    { id: 1, nombre: "Limpiador Facial", precio: 199.99, descuento: "10% OFF", calificacion: 4.5, categoria: "Limpiadores Faciales", imagen: "/img/limpiador.png" },
-    { id: 2, nombre: "Tónico Calmante", precio: 299.99, descuento: "15% OFF", calificacion: 4.8, categoria: "Tónicos", imagen: "/img/tonico.png" },
-    { id: 3, nombre: "Serum Hidratante", precio: 399.99, descuento: "20% OFF", calificacion: 4.3, categoria: "Serums y Ampolletas", imagen: "/img/serum.png" },
-    { id: 4, nombre: "Protector Solar", precio: 249.99, descuento: "5% OFF", calificacion: 4.7, categoria: "Protección Solar", imagen: "/img/protector.png" },
-  ];
+  const [productos, setProductos] = useState([]);
 
-  const categorias = [
-    "Todas las Categorías",
-    "Limpiadores Faciales",
-    "Tónicos",
-    "Serums y Ampolletas",
-    "Protección Solar",
-    "Cuidado del Cabello",
-    "Maquillaje",
-    "Accesorios",
-  ];
+  const [categorias, setCategorias] = useState([]);
 
   // Contexto del carrito y favoritos
   const { agregarAlCarrito, favoritos, toggleFavorito } = useContext(CarritoContext);
@@ -31,26 +17,63 @@ function Productos() {
   const terminoBusqueda = query.get("buscar") || "";
 
   const [categoriaSeleccionada, setCategoriaSeleccionada] = useState("Todas las Categorías");
-  const [productosFiltrados, setProductosFiltrados] = useState(productos);
+  const [productosFiltrados, setProductosFiltrados] = useState([]);
 
-  // Filtrar productos por categoría o búsqueda
+  useEffect(() => {
+    const apiUrl = process.env.REACT_APP_API_URL;
+
+    const fetchProductos = async () => {
+      try {
+        const response = await fetch(`${apiUrl}/Productos`, {
+          method: "GET",
+          credentials: "include",
+        });
+        const data = await response.json();
+        setProductos(data); // ✅ solo carga productos
+      } catch (error) {
+        console.error("Error al obtener los productos:", error);
+      }
+    };
+
+    const fetchCategorias = async () => {
+      try {
+        const response = await fetch(`${apiUrl}/Categorias`, {
+          method: "GET",
+          credentials: "include",
+        });
+        const data = await response.json();
+        //console.log("categorias: ", data);
+        setCategorias(data);
+      } catch (error) {
+        console.error("Error al obtener las categorias:", error);
+      }
+    };
+
+    fetchCategorias();
+    fetchProductos();
+  }, []);
+
   useEffect(() => {
     let resultado = productos;
 
     if (categoriaSeleccionada !== "Todas las Categorías") {
-      resultado = resultado.filter((producto) => producto.categoria === categoriaSeleccionada);
+      resultado = resultado.filter(
+        (producto) =>
+          producto.idCategoria == categoriaSeleccionada
+      );
     }
 
     if (terminoBusqueda) {
       resultado = resultado.filter(
         (producto) =>
-          producto.nombre.toLowerCase().includes(terminoBusqueda.toLowerCase()) ||
-          producto.categoria.toLowerCase().includes(terminoBusqueda.toLowerCase())
+          producto.nombreProducto.toLowerCase().includes(terminoBusqueda.toLowerCase()) ||
+          producto.categoria?.nombreCategoria.toLowerCase().includes(terminoBusqueda.toLowerCase())
       );
     }
 
+    //console.log(favoritos);
     setProductosFiltrados(resultado);
-  }, [categoriaSeleccionada, terminoBusqueda]);
+  }, [productos, categoriaSeleccionada, terminoBusqueda]);
 
   return (
     <div className="productos-page">
@@ -62,9 +85,12 @@ function Productos() {
       <div className="filtros-contenedor">
         <label htmlFor="categoria">Filtrar por Categoría</label>
         <select id="categoria" value={categoriaSeleccionada} onChange={(e) => setCategoriaSeleccionada(e.target.value)}>
+          <option value="Todas las Categorías">
+              Todas las Categorías
+            </option>
           {categorias.map((cat) => (
-            <option key={cat} value={cat}>
-              {cat}
+            <option key={cat.idCategoria} value={cat.idCategoria}>
+              {cat.nombreCategoria}
             </option>
           ))}
         </select>
@@ -77,10 +103,10 @@ function Productos() {
       ) : (
         <div className="productos-grid">
           {productosFiltrados.map((producto) => (
-            <div className="producto-card" key={producto.id}>
+            <div className="producto-card" key={producto.idProducto}>
               <span className="producto-descuento">{producto.descuento}</span>
-              <img src={producto.imagen} alt={producto.nombre} className="producto-imagen" />
-              <h3 className="producto-nombre">{producto.nombre}</h3>
+              <img src={producto.imagenUrl} alt={producto.nombreProducto} className="producto-imagen" />
+              <h3 className="producto-nombre">{producto.nombreProducto}</h3>
               <p className="producto-precio">${producto.precio.toFixed(2)}</p>
               <p className="producto-calificacion">⭐ {producto.calificacion} / 5</p>
               <div className="acciones">
@@ -88,10 +114,10 @@ function Productos() {
                   Añadir al carrito
                 </button>
                 <button
-                  className={`favorito-btn ${favoritos.some((fav) => fav.id === producto.id) ? "guardado" : ""}`}
+                  className={`favorito-btn ${favoritos.some((fav) => fav.idProducto === producto.idProducto && fav.activo===true) ? "guardado" : ""}`}
                   onClick={() => toggleFavorito(producto)}
                 >
-                  {favoritos.some((fav) => fav.id === producto.id) ? "❤️ Guardado" : "🤍 Guardar"}
+                  {favoritos.some((fav) => fav.idProducto === producto.idProducto && fav.activo===true) ? "❤️ Guardado" : "🤍 Guardar"}
                 </button>
               </div>
             </div>

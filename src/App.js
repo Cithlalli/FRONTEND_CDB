@@ -1,4 +1,4 @@
-import './App.css';   
+import './App.css';
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Header from './components/Header';
@@ -9,8 +9,8 @@ import Pie from './components/Pie';
 import MYC from './components/MYC';
 import Productos from './Productos';
 import Carrito from './components/Carrito';
-import CuidadoPiel from "./CuidadoPiel"; 
-import CuidadoCabello from "./CuidadoCabello"; 
+import CuidadoPiel from "./CuidadoPiel";
+import CuidadoCabello from "./CuidadoCabello";
 import Maquillaje from "./Maquillaje";
 import Favoritos from "./components/Favoritos";
 import Login from "./auth/Login";
@@ -19,6 +19,8 @@ import AdminPanel from "./admin/AdminPanel";
 import PedidosUsuarios from "./components/PedidosUsuarios";
 import { CarritoProvider } from './components/CarritoContext';
 import { AuthProvider } from './auth/AuthContext';
+import { AdminAuthProvider } from './auth/AdminAuthContext';
+import RequireAuth from './auth/RequireAuth';
 import PerfilUsuario from './components/PerfilUsuario';
 import HistorialCompras from './components/HistorialCompras';
 import Register from "./auth/Register"; // Asegúrate de que la ruta sea correcta
@@ -148,32 +150,65 @@ function PedidosUsuariosPage() {
 
 function App() {
   return (
-    <AuthProvider>
-      <CarritoProvider>
-        <Router>
-          <Routes>
-            {/* Rutas Públicas */}
-            <Route path="/" element={<HomePage />} />
-            <Route path="/productos" element={<ProductPage />} />
-            <Route path="/carrito" element={<CarritoPage />} />
-            <Route path="/cuidadopiel" element={<CuidadoPielPage />} />
-            <Route path="/cuidadocabello" element={<CuidadoCabelloPage />} />
-            <Route path="/maquillaje" element={<MaquillajePage />} />
-            <Route path="/favoritos" element={<FavoritosPage />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/admin/login" element={<AdminLogin />} />
-            <Route path="/mis-pedidos" element={<PedidosUsuariosPage />} />
-            <Route path="/registro" element={<RegisterPage />} />
-            {/* Nuevas rutas (accesibles sin login) */}
-            <Route path="/perfil" element={<PerfilUsuarioPage />} />
-            <Route path="/historial-compras" element={<HistorialComprasPage />} />
+    <CarritoProvider>
+      <Router>
+        <Routes>
 
-            {/* Ruta protegida solo para Admin */}
-            <Route path="/admin" element={<AdminPanelPage />} />
-          </Routes>
-        </Router>
-      </CarritoProvider>
-    </AuthProvider>
+          {/* Rutas protegidas con AuthProvider (usuario normal) */}
+          <Route
+            path="/*"
+            element={
+              <AuthProvider>
+                <UserRoutes />
+              </AuthProvider>
+            }
+          />
+
+          {/* Rutas protegidas con AdminAuthProvider */}
+          <Route
+            path="/admin/*"
+            element={
+              <AdminAuthProvider>
+                <AdminRoutes />
+              </AdminAuthProvider>
+            }
+          />
+
+        </Routes>
+      </Router>
+    </CarritoProvider>
+  );
+}
+
+function UserRoutes() {
+  return (
+    <Routes>
+      <Route path="/" element={<HomePage />} />
+      <Route path="/productos" element={<ProductPage />} />
+      <Route path="/carrito" element={<CarritoPage />} />
+      <Route path="/cuidadopiel" element={<CuidadoPielPage />} />
+      <Route path="/cuidadocabello" element={<CuidadoCabelloPage />} />
+      <Route path="/maquillaje" element={<MaquillajePage />} />
+      <Route path="/favoritos" element={<FavoritosPage />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/mis-pedidos" element={<PedidosUsuariosPage />} />
+      <Route path="/registro" element={<RegisterPage />} />
+      <Route path="/perfil" element={<PerfilUsuarioPage />} />
+      <Route path="/historial-compras" element={<HistorialComprasPage />} />
+    </Routes>
+  );
+}
+
+function AdminRoutes() {
+  return (
+    <Routes>
+      <Route path="login" element={<AdminLogin />} />
+      <Route path="" element={
+        <RequireAuth>
+          <AdminPanelPage />
+        </RequireAuth>} />
+      {/* Aquí puedes seguir agregando más rutas administrativas */}
+    </Routes>
   );
 }
 

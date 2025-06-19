@@ -6,7 +6,7 @@ function Favoritos() {
   const { favoritos, agregarAlCarrito, toggleFavorito } = useContext(CarritoContext);
   const [mostrarDetalles, setMostrarDetalles] = useState(null); // Estado para el modal
   const navigate = useNavigate();
-
+  //console.log(favoritos);
   if (favoritos.length === 0) {
     return (
       <div className="favoritos-vacio">
@@ -29,17 +29,17 @@ function Favoritos() {
       <h2>Favoritos</h2>
       <div className="productos-grid">
         {favoritos.map((producto) => (
-          <div className="producto-card" key={producto.id}>
+          <div className="producto-card" key={producto.idProducto}>
             {/* Ícono de favorito */}
             <div
               className="favorito-icon"
               onClick={() => toggleFavorito(producto)}
             >
-              {favoritos.some((fav) => fav.id === producto.id) ? "❤️" : "🤍"}
+              {favoritos.some((fav) => fav.idProducto === producto.idProducto) ? "❤️" : "🤍"}
             </div>
-            <img src={producto.imagen} alt={producto.nombre} />
-            <h3>{producto.nombre}</h3>
-            <p>${producto.precio.toFixed(2)}</p>
+            <img src={producto.idProductoNavigation.imagenUrl} alt={producto.idProductoNavigation.nombreProducto} />
+            <h3>{producto.idProductoNavigation.nombreProducto}</h3>
+            <p>${producto.idProductoNavigation.precio}</p>
             <div className="acciones">
               <button onClick={() => setMostrarDetalles(producto)}>
                 Ver más
@@ -59,8 +59,8 @@ function Favoritos() {
       {mostrarDetalles && (
         <div className="modal">
           <div className="modal-content">
-            <h2>{mostrarDetalles.nombre}</h2>
-            <p>{mostrarDetalles.detalles}</p>
+            <h2>{mostrarDetalles.idProductoNavigation.nombreProducto}</h2>
+            <p>{mostrarDetalles.idProductoNavigation.descripcion}</p>
             <button onClick={() => setMostrarDetalles(null)}>Cerrar</button>
           </div>
         </div>

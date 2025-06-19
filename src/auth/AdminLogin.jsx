@@ -1,19 +1,33 @@
 import React, { useState } from "react";
+import { useAuth } from "./AdminAuthContext";
 import { Form, Button, Card, Container, Alert } from "react-bootstrap";
+import { Navigate, useLocation, useNavigate } from "react-router-dom";
 
 function AdminLogin() {
+  const { user, loading, login } = useAuth();
+  const navigate = useNavigate();
+  const location = useLocation();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (email === "admin@example.com" && password === "admin123") {
-      setError(null);
-    } else {
-      setError("Credenciales incorrectas");
+
+    try {
+      await login(email, password);
+      navigate("/admin");
+    } catch (err) {
+      setError(err.message || "Credenciales incorrectas");
     }
   };
+
+  if (loading) return <p style={{ textAlign: "center" }}>Cargando...</p>;
+
+  if (user !== null) {
+    return <Navigate to="/admin" state={{ from: location }} replace />;
+  }
 
   return (
     <Container className="d-flex align-items-center justify-content-center" style={{ minHeight: "100vh" }}>
